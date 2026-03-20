@@ -37,53 +37,61 @@ st.write(' Please enter your health data below to predict your hypertension stat
 st.write('Remember, this tool is for informational purposes only and should not replace professional medical advice. Always consult with a healthcare provider for any health concerns or conditions.')
 
 # User input
-age = st.number_input('age')
-sex = st.selectbox('sex', ['Male', 'Female'])
-sex_map = {'Female': 0, 'Male': 1}
-bmi = st.number_input('bmi', help="BMI = weight (kg) ÷ height² (m²). \n Example: 70kg / (1.75 × 1.75)" )
-residence = st.selectbox('residence', ['Rural','Urban'])
-residence_map = {'Rural': 0, 'Urban': 1}
-total_cholesterol_mg_dl = st.number_input('total_cholesterol_mg_dl')
-smoking = st.selectbox('smoking', ['No', 'Yes'])
-smoking_map = {'No': 0, 'Yes': 1}
-diabetes = st.selectbox('diabetes', ['No', 'Yes'])
-diabetes_map = {'No': 0, 'Yes': 1}
-family_history_hypertension = st.selectbox('family_history_hypertension', ['No', 'Yes'])
-family_history_hypertension_map = {'No': 0, 'Yes': 1}
-age_group = st.selectbox('age_group', ['Young', 'Middle-aged', 'Senior'], help="Age groups are categorized as follows: Young (Below 35 years), Middle-aged (35-55 years), Senior (56 years and above).")
-age_group_map = {'Young': 0, 'Middle-aged': 1, 'Senior': 2}
-stress_level = st.selectbox('stress_level', ['Low', 'Medium', 'High'], help="Stress levels are categorized as follows: Low (minimal stress), Medium (occasional stress), High (frequent or chronic stress).")
-stress_level_map = {'Low': 0, 'Medium': 1, 'High': 2}
-income_level = st.selectbox('income_level', ['Low', 'Medium', 'High'], help="Income levels are categorized as follows: Low (limited access to healthcare or poor nutrition), Medium (Average access to healthcare and resources), High (Best access to preventive medicine and fitness resources).")
-income_level_map = {'Low': 0, 'Medium': 1, 'High': 2}
-education_level = st.selectbox('education_level', ['Basic', 'Secondary', 'Tertiary'])
-education_level_map = {'Basic': 0, 'Secondary': 1, 'Tertiary': 2}
-sleep_hours = st.number_input('sleep_hours')
-alcohol_heavy = st.selectbox('alcohol_heavy', ['No', 'Yes'])
-alcohol_heavy_map = {'No': 0, 'Yes': 1}
-physically_active = st.selectbox('physically_active', ['No', 'Yes'])
-physically_active_map = {'No': 0, 'Yes': 1}
-high_salt_diet = st.selectbox('high_salt_diet', ['No', 'Yes'])
-high_salt_diet_map = {'No': 0, 'Yes': 1}
-diagnosed = st.selectbox('diagnosed', ['No', 'Yes'], help="Have you been previously diagnosed with hypertension by a healthcare professional?")
-diagnosed_map = {'No': 0, 'Yes': 1}
-on_medication = st.selectbox('on_medication', ['No', 'Yes'])
-on_medication_map = {'No': 0, 'Yes': 1}
-medication_adherence = st.selectbox('medication_adherence', ['Low', 'Medium', 'High'])  
-medication_adherence_map = {'Low': 0, 'Medium': 1, 'High': 2}
-bp_controlled = st.selectbox('bp_controlled', ['No', 'Yes'], help="Is your blood pressure controlled?")
-bp_controlled_map = {'No': 0, 'Yes': 1}
-stroke_history = st.selectbox('stroke_history', ['No', 'Yes'], help="Have you had a stroke before?")
-stroke_history_map = {'No': 0, 'Yes': 1}
-myocardial_infarction = st.selectbox('myocardial_infarction', ['No', 'Yes'], help="Have you had a myocardial infarction (heart attack) before?")
-myocardial_infarction_map = {'No': 0, 'Yes': 1}
-heart_failure = st.selectbox('heart_failure', ['No', 'Yes'], help="Have you been diagnosed with heart failure?")
-heart_failure_map = {'No': 0, 'Yes': 1}
-ldl_mg_dl = st.number_input('ldl_mg_dl', help="LDL (Low-Density Lipoprotein) cholesterol levels in mg/dL. \n Example: 100 mg/dL")
-hdl_mg_dl = st.number_input('hdl_mg_dl', help="HDL (High-Density Lipoprotein) cholesterol levels in mg/dL. \n Example: 60 mg/dL")
-creatine_mg_dl = st.number_input('creatine_mg_dl', help="Creatine levels in mg/dL, which can indicate kidney function. \n Example: 1.0 mg/dL")
+with st.expander('Personal Details', expanded=True):
+    age = st.number_input('age')
+    sex = st.selectbox('sex', ['Male', 'Female'])
+    sex_map = {'Female': 0, 'Male': 1}
+    age_group = st.selectbox('age_group', ['Young', 'Middle-aged', 'Senior'], help="Age groups are categorized as follows: Young (Below 35 years), Middle-aged (35-55 years), Senior (56 years and above).")
+    age_group_map = {'Young': 0, 'Middle-aged': 1, 'Senior': 2}
 
-#Create an arrayfor user input
+with st.expander('Health and Lifestyle Factors', expanded=True):
+    bmi = st.number_input('bmi', help="BMI = weight (kg) ÷ height² (m²). \n Example: 70kg / (1.75 × 1.75)" )
+    total_cholesterol_mg_dl = st.number_input('total_cholesterol_mg_dl')
+    smoking = st.selectbox('smoking', ['No', 'Yes'])
+    smoking_map = {'No': 0, 'Yes': 1}
+    diabetes = st.selectbox('diabetes', ['No', 'Yes'])
+    diabetes_map = {'No': 0, 'Yes': 1}
+    family_history_hypertension = st.selectbox('family_history_hypertension', ['No', 'Yes'])
+    family_history_hypertension_map = {'No': 0, 'Yes': 1}
+    sleep_hours = st.number_input('sleep_hours')
+    alcohol_heavy = st.selectbox('alcohol_heavy', ['No', 'Yes'])
+    alcohol_heavy_map = {'No': 0, 'Yes': 1}
+    physically_active = st.selectbox('physically_active', ['No', 'Yes'])
+    physically_active_map = {'No': 0, 'Yes': 1}
+    high_salt_diet = st.selectbox('high_salt_diet', ['No', 'Yes'])
+    high_salt_diet_map = {'No': 0, 'Yes': 1}
+    diagnosed = st.selectbox('diagnosed', ['No', 'Yes'], help="Have you been previously diagnosed with hypertension by a healthcare professional?")
+    diagnosed_map = {'No': 0, 'Yes': 1}
+    on_medication = st.selectbox('on_medication', ['No', 'Yes'])
+    on_medication_map = {'No': 0, 'Yes': 1}
+    medication_adherence = st.selectbox('medication_adherence', ['Low', 'Medium', 'High'])  
+    medication_adherence_map = {'Low': 0, 'Medium': 1, 'High': 2}
+    bp_controlled = st.selectbox('bp_controlled', ['No', 'Yes'], help="Is your blood pressure controlled?")
+    bp_controlled_map = {'No': 0, 'Yes': 1}
+    stroke_history = st.selectbox('stroke_history', ['No', 'Yes'], help="Have you had a stroke before?")
+    stroke_history_map = {'No': 0, 'Yes': 1}
+    myocardial_infarction = st.selectbox('myocardial_infarction', ['No', 'Yes'], help="Have you had a myocardial infarction (heart attack) before?")
+    myocardial_infarction_map = {'No': 0, 'Yes': 1}
+    heart_failure = st.selectbox('heart_failure', ['No', 'Yes'], help="Have you been diagnosed with heart failure?")
+    heart_failure_map = {'No': 0, 'Yes': 1}
+
+with st.expander('Laboratory Measurements', expanded=True):
+    total_cholesterol_mg_dl = st.number_input('total_cholesterol_mg_dl', help="Total cholesterol levels in mg/dL. \n Example: 200 mg/dL")
+    ldl_mg_dl = st.number_input('ldl_mg_dl', help="LDL (Low-Density Lipoprotein) cholesterol levels in mg/dL. \n Example: 100 mg/dL")
+    hdl_mg_dl = st.number_input('hdl_mg_dl', help="HDL (High-Density Lipoprotein) cholesterol levels in mg/dL. \n Example: 60 mg/dL")
+    creatine_mg_dl = st.number_input('creatine_mg_dl', help="Creatine levels in mg/dL, which can indicate kidney function. \n Example: 1.0 mg/dL")
+
+with st.expander('Socioeconomic and Psychosocial Factors', expanded=True):
+    residence = st.selectbox('residence', ['Urban', 'Rural'])
+    residence_map = {'Urban': 0, 'Rural': 1}
+    income_level = st.selectbox('income_level', ['Low', 'Medium', 'High'])
+    income_level_map = {'Low': 0, 'Medium': 1, 'High': 2}
+    education_level = st.selectbox('education_level', ['No formal education', 'Primary education', 'Secondary education', 'Tertiary education'])
+    education_level_map = {'No formal education': 0, 'Primary education': 1, 'Secondary education': 2, 'Tertiary education': 3}
+    stress_level = st.selectbox('stress_level', ['Low', 'Medium', 'High'])
+    stress_level_map = {'Low': 0, 'Medium': 1, 'High': 2}
+    
+#Create an array for user input
 userInput = [
     age,
     sex_map[sex],
