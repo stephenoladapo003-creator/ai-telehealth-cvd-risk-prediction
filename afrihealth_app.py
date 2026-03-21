@@ -24,6 +24,7 @@ else:
 
 # Load model
 model = joblib.load("hypertension_model.pkl")
+print('Model classes (debug):', model.classes_)
 # Load data
 data = pd.read_csv('final_realistic_hypertension_data.csv')
 X_test = data.drop(columns=['hypertension_status','systolic_bp_mmhg','diastolic_bp_mmhg'])
@@ -38,7 +39,7 @@ st.write('Remember, this tool is for informational purposes only and should not 
 
 # User input
 with st.expander('Personal Details', expanded=True):
-    age = st.number_input('age')
+    age = st.number_input('age', min_value = 0 , step=1 , format= '%d')
     sex = st.selectbox('sex', ['Male', 'Female'])
     sex_map = {'Female': 0, 'Male': 1}
     age_group = st.selectbox('age_group', ['Young', 'Middle-aged', 'Senior'], help="Age groups are categorized as follows: Young (Below 35 years), Middle-aged (35-55 years), Senior (56 years and above).")
@@ -46,14 +47,12 @@ with st.expander('Personal Details', expanded=True):
 
 with st.expander('Health and Lifestyle Factors', expanded=True):
     bmi = st.number_input('bmi', help="BMI = weight (kg) ÷ height² (m²). \n Example: 70kg / (1.75 × 1.75)" )
-    total_cholesterol_mg_dl = st.number_input('total_cholesterol_mg_dl')
-    smoking = st.selectbox('smoking', ['No', 'Yes'])
-    smoking_map = {'No': 0, 'Yes': 1}
-    diabetes = st.selectbox('diabetes', ['No', 'Yes'])
-    diabetes_map = {'No': 0, 'Yes': 1}
     family_history_hypertension = st.selectbox('family_history_hypertension', ['No', 'Yes'])
     family_history_hypertension_map = {'No': 0, 'Yes': 1}
-    sleep_hours = st.number_input('sleep_hours')
+    diabetes = st.selectbox('diabetes', ['No', 'Yes'])
+    diabetes_map = {'No': 0, 'Yes': 1}
+    smoking = st.selectbox('smoking', ['No', 'Yes'])
+    smoking_map = {'No': 0, 'Yes': 1}
     alcohol_heavy = st.selectbox('alcohol_heavy', ['No', 'Yes'])
     alcohol_heavy_map = {'No': 0, 'Yes': 1}
     physically_active = st.selectbox('physically_active', ['No', 'Yes'])
@@ -62,10 +61,10 @@ with st.expander('Health and Lifestyle Factors', expanded=True):
     high_salt_diet_map = {'No': 0, 'Yes': 1}
     diagnosed = st.selectbox('diagnosed', ['No', 'Yes'], help="Have you been previously diagnosed with hypertension by a healthcare professional?")
     diagnosed_map = {'No': 0, 'Yes': 1}
-    on_medication = st.selectbox('on_medication', ['No', 'Yes'])
+    on_medication = st.selectbox('on_medication', ['No', 'Yes'], help="Are you currently taking any medication for hypertension?")
     on_medication_map = {'No': 0, 'Yes': 1}
-    medication_adherence = st.selectbox('medication_adherence', ['Low', 'Medium', 'High'])  
-    medication_adherence_map = {'Low': 0, 'Medium': 1, 'High': 2}
+    medication_adherence = st.selectbox('medication_adherence', ['No','Yes'], help="Are you adhering to your prescribed medication regimen?")
+    medication_adherence_map = {'No':0 , 'Yes':1}
     bp_controlled = st.selectbox('bp_controlled', ['No', 'Yes'], help="Is your blood pressure controlled?")
     bp_controlled_map = {'No': 0, 'Yes': 1}
     stroke_history = st.selectbox('stroke_history', ['No', 'Yes'], help="Have you had a stroke before?")
@@ -74,121 +73,153 @@ with st.expander('Health and Lifestyle Factors', expanded=True):
     myocardial_infarction_map = {'No': 0, 'Yes': 1}
     heart_failure = st.selectbox('heart_failure', ['No', 'Yes'], help="Have you been diagnosed with heart failure?")
     heart_failure_map = {'No': 0, 'Yes': 1}
+    sleep_hours = st.number_input('sleep_hours',min_value=0, step=1, format= '%d', help="Average hours of sleep per night. \n Example: 7 hours")
 
 with st.expander('Laboratory Measurements', expanded=True):
     total_cholesterol_mg_dl = st.number_input('total_cholesterol_mg_dl', help="Total cholesterol levels in mg/dL. \n Example: 200 mg/dL")
     ldl_mg_dl = st.number_input('ldl_mg_dl', help="LDL (Low-Density Lipoprotein) cholesterol levels in mg/dL. \n Example: 100 mg/dL")
     hdl_mg_dl = st.number_input('hdl_mg_dl', help="HDL (High-Density Lipoprotein) cholesterol levels in mg/dL. \n Example: 60 mg/dL")
-    creatine_mg_dl = st.number_input('creatine_mg_dl', help="Creatine levels in mg/dL, which can indicate kidney function. \n Example: 1.0 mg/dL")
+    creatinine_mg_dl = st.number_input('creatinine_mg_dl', help="Creatine levels in mg/dL, which can indicate kidney function. \n Example: 1.0 mg/dL")
 
 with st.expander('Socioeconomic and Psychosocial Factors', expanded=True):
     residence = st.selectbox('residence', ['Urban', 'Rural'])
     residence_map = {'Urban': 0, 'Rural': 1}
     income_level = st.selectbox('income_level', ['Low', 'Medium', 'High'])
     income_level_map = {'Low': 0, 'Medium': 1, 'High': 2}
-    education_level = st.selectbox('education_level', ['No formal education', 'Primary education', 'Secondary education', 'Tertiary education'])
-    education_level_map = {'No formal education': 0, 'Primary education': 1, 'Secondary education': 2, 'Tertiary education': 3}
+    education_level = st.selectbox('education_level', ['Basic',  'Secondary', 'Tertiary'])
+    education_level_map = {'Basic': 0, 'Secondary': 1, 'Tertiary': 2}
     stress_level = st.selectbox('stress_level', ['Low', 'Medium', 'High'])
     stress_level_map = {'Low': 0, 'Medium': 1, 'High': 2}
     
 #Create an array for user input
-userInput = [
-    age,
-    sex_map[sex],
-    residence_map[residence],
-    bmi,
-    family_history_hypertension_map[family_history_hypertension],
-    diabetes_map[diabetes],
-    smoking_map[smoking],
-    alcohol_heavy_map[alcohol_heavy],
-    physically_active_map[physically_active],
-    high_salt_diet_map[high_salt_diet],
-    diagnosed_map[diagnosed],
-    on_medication_map[on_medication],
-    medication_adherence_map[medication_adherence],
-    bp_controlled_map[bp_controlled],
-    stroke_history_map[stroke_history],
-    myocardial_infarction_map[myocardial_infarction],
-    heart_failure_map[heart_failure],
-    total_cholesterol_mg_dl,
-    ldl_mg_dl,
-    hdl_mg_dl,
-    creatine_mg_dl,
-    age_group_map[age_group],
-    income_level_map[income_level],
-    education_level_map[education_level],
-    stress_level_map[stress_level],
-    sleep_hours,
-]
+userInputdict = {
+    'age': age,
+    'sex': sex_map[sex],
+    'age_group': age_group_map[age_group],
+    'bmi': bmi,
+    'family_history_hypertension': family_history_hypertension_map[family_history_hypertension],
+    'diabetes': diabetes_map[diabetes],
+    'smoking': smoking_map[smoking],
+    'alcohol_heavy': alcohol_heavy_map[alcohol_heavy],
+    'physically_active': physically_active_map[physically_active],
+    'high_salt_diet': high_salt_diet_map[high_salt_diet],
+    'diagnosed': diagnosed_map[diagnosed],
+    'on_medication': on_medication_map[on_medication],
+    'medication_adherence': medication_adherence_map[medication_adherence],
+    'bp_controlled': bp_controlled_map[bp_controlled],
+    'stroke_history': stroke_history_map[stroke_history],
+    'myocardial_infarction': myocardial_infarction_map[myocardial_infarction],
+    'heart_failure': heart_failure_map[heart_failure],
+    'sleep_hours': sleep_hours,
+    'total_cholesterol_mg_dl': total_cholesterol_mg_dl,
+    'ldl_mg_dl': ldl_mg_dl,
+    'hdl_mg_dl': hdl_mg_dl,
+    'creatinine_mg_dl': creatinine_mg_dl,
+    'residence': residence_map[residence],
+    'income_level': income_level_map[income_level],
+    'education_level': education_level_map[education_level],
+    'stress_level': stress_level_map[stress_level],
+}
+
+# function to check if all fields are filled before making a prediction
+def all_fields_filled(user_input, features):
+    numeric_fields = ['age', 'bmi', 'sleep_hours', 'total_cholesterol_mg_dl', 'ldl_mg_dl', 'hdl_mg_dl', 'creatinine_mg_dl']
+    for key in features:
+        value = user_input.get(key, None)
+        if value is None:
+            return False, key
+        if key in numeric_fields and value <= 0:
+            return False, key
+    return True, None
+
 
 #Predict hypertension status
 if st.button('Predict Hypertension Status'):
-    prediction = model.predict([userInput])[0] # returns the first element of the array, which is the predicted class (0 or 1)
-    probability = model.predict_proba([userInput])[0][1]  # Probability of the predicted class
-    
-    #display prediction result
-    if prediction == 1:
-        st.error(f'Hypertensive')
+    # Check if all fields are filled before making a prediction
+    filled, missing_field = all_fields_filled(userInputdict, features)
+    if not filled:
+        st.warning(f"Please fill in the field: {missing_field} before predicting!")
     else:
-        st.success(f'Non-Hypertensive')
-
-    #risk assessment based on probability and recommendations for patients/individuals#
-    if user_type == 'Patient/Individual':
-        if probability >=  0.7:
-            st.error(f"High Risk of Hypertension with a probability of {probability:.2%}")
-
-            st.subheader('Recommendation')
-            st.markdown("""
-            - Consult a healthcare professional immediately  
-            - Monitor your blood pressure regularly  
-            - Reduce salt intake  
-            - Maintain a healthy lifestyle  
-            """)
-        elif probability >= 0.4:
-            st.warning(f"Moderate Risk of Hypertension with a probability of {probability:.2%}")
-
-            st.subheader('Recommendation')
-            st.markdown("""
-            - Schedule a check-up with your healthcare provider  
-            - Monitor your blood pressure regularly  
-            - Adopt a healthy diet and lifestyle  
-            """)
-        else:
-            st.success(f"Low Risk of Hypertension with a probability of {probability:.2%}")
-
-            st.subheader('Recommendation')
-            st.markdown("""
-            - Continue maintaining a healthy lifestyle  
-            - Monitor your blood pressure regularly  
-            - Schedule regular check-ups with your healthcare provider  
-            """)
+        # Create DataFrame with correct order
+        user_df = pd.DataFrame([userInputdict])
+        user_df = user_df[model.feature_names_in_]  # Ensure the order of features matches the model's expected input
         
-    # risk assessment based on probability and recommendations for healthcare professionals 
-    if user_type == 'Healthcare Professional':
-        if probability >= 0.7:
-            st.error(f"High Risk of Hypertension with a probability of {probability:.2%}")
+        
+        prediction = model.predict(user_df)[0] # returns the first element of the array, which is the predicted class (0 or 1)
+        probability = model.predict_proba(user_df)[0] # Probability of the predicted class
+    
+        hypertensive_class = 0 # 0 corresponds to "Hypertensive" in the model's classes
+        non_hypertensive_class = 1# 1 corresponds to "Non-Hypertensive" in the model's classes
+        predicted_label = "Hypertensive" if prediction == hypertensive_class else "Non-Hypertensive"
+    
+        # Probability of hypertension (used for risk content)
+        prob_hypertensive = probability[list(model.classes_).index(hypertensive_class)] # Get the probability of the "Hypertensive" class
 
-            st.subheader('Recommendation')
-            st.markdown("""
-            - Prioritize patient for immediate intervention  
-            - Conduct further diagnostic tests  
-            - Develop a comprehensive treatment plan  
-            """)
-        elif probability >= 0.4:
-            st.warning(f"Moderate Risk of Hypertension with a probability of {probability:.2%}")
-
-            st.subheader('Recommendation')
-            st.markdown("""
-            - Schedule follow-up appointments  
-            - Monitor patient's blood pressure regularly  
-            - Provide lifestyle modification advice  
-            """)
+        # Display result in Streamlit
+        if predicted_label == "Hypertensive":
+            st.error(f'{predicted_label}')
         else:
-            st.success(f"Low Risk of Hypertension with a probability of {probability:.2%}")
+            st.success(f'{predicted_label}')
+            
+    
+        #risk assessment based on probability and recommendations for patients/individuals#
+        if user_type == 'Patient/Individual':
+            if prob_hypertensive >=  0.7:
+                st.error(f"High Risk of Hypertension with a probability of {prob_hypertensive:.2%}")
 
-            st.subheader('Recommendation')
-            st.markdown("""
-            - Continue regular monitoring  
-            - Encourage healthy lifestyle choices  
-            - Schedule routine check-ups  
-            """)    
+                st.subheader('Recommendation')
+                st.markdown("""
+                - Consult a healthcare professional immediately  
+                - Monitor your blood pressure regularly  
+                - Reduce salt intake  
+                - Maintain a healthy lifestyle  
+                """)
+            elif prob_hypertensive >= 0.4:
+                st.warning(f"Moderate Risk of Hypertension with a probability of {prob_hypertensive:.2%}")
+
+                st.subheader('Recommendation')
+                st.markdown("""
+                - Schedule a check-up with your healthcare provider  
+                - Monitor your blood pressure regularly  
+                - Adopt a healthy diet and lifestyle  
+                """)
+            else:
+                st.success(f"Low Risk of Hypertension with a probability of {prob_hypertensive:.2%}")
+
+                st.subheader('Recommendation')
+                st.markdown("""
+                - Continue maintaining a healthy lifestyle  
+                - Monitor your blood pressure regularly  
+                - Schedule regular check-ups with your healthcare provider  
+                """)
+            
+        # risk assessment based on probability and recommendations for healthcare professionals 
+        if user_type == 'Healthcare Professional':
+            if prob_hypertensive >= 0.7:
+                st.error(f"High Risk of Hypertension with a probability of {prob_hypertensive:.2%}")
+
+                st.subheader('Recommendation')
+                st.markdown("""
+                - Prioritize patient for immediate intervention  
+                - Conduct further diagnostic tests  
+                - Develop a comprehensive treatment plan  
+                """)
+            elif prob_hypertensive >= 0.4:
+                st.warning(f"Moderate Risk of Hypertension with a probability of {prob_hypertensive:.2%}")
+
+                st.subheader('Recommendation')
+                st.markdown("""
+                - Schedule follow-up appointments  
+                - Monitor patient's blood pressure regularly  
+                - Provide lifestyle modification advice  
+                """)
+            else:
+                st.success(f"Low Risk of Hypertension with a probability of {prob_hypertensive:.2%}")
+
+                st.subheader('Recommendation')
+                st.markdown("""
+                - Continue regular monitoring  
+                - Encourage healthy lifestyle choices
+                - Schedule routine check-ups  
+                """)    
+                
