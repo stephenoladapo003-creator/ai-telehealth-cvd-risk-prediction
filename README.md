@@ -193,7 +193,7 @@ streamlit run app.py
 ---
 
 ## Team
-Group 9 — TechCrush AI/ML Capstone Project 2026
+Team AfriHealth— TechCrush AI/ML Capstone Project 2026
 
 | Name | Role |
 |---|---|
