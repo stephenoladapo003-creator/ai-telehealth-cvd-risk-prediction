@@ -197,18 +197,19 @@ Group 9 — TechCrush AI/ML Capstone Project 2026
 
 | Name | Role |
 |---|---|
- Oladapo Stephen | Project Lead |
+| Oladapo Stephen | Project Lead |
 | Lola Owolabi | Model Engineering and Documentation |
+| Adediran Adedoyin Rahman | Dataset Cleaning |
 | Olagunju Amina Busayo | Streamlit Deployment |
-| Adekunrun Janet | Model Engineering |
-| Sodiq Abdulazeez | ML and Pipeline Engineering |
-| Oluwadare Elizabeth Aderike | Dataset Cleaning |
-| Atinuke Mubarak Eniola | ML and Pipeline Engineering |
-| Omojola Boluwatife Charles | Data Preprocessing |
 | Temitayo Dada | Streamlit Development |
+| Omojola Boluwatife Charles | Data Preprocessing |
+| Adekunrun Janet | Model Engineering |
+| Atinuke Mubarak Eniola | ML and Pipeline Engineering |
+| Oluwadare Elizabeth Aderike | Dataset Cleaning |
 | Mbonu Hilda Omon | ML and Pipeline Engineering |
 | Opemipo Awolana | Streamlit Development |
 | Blessing Effiong Abatai | ML and Pipeline Engineering |
+| Sodiq Abdulazeez | ML and Pipeline Engineering |
 
 ---
 
