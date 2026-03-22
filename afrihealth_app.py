@@ -23,7 +23,7 @@ else:
     st.write('Please ensure that the information provided is accurate for the best results, and always reach out to your patients for any medical concerns or conditions.')
 
 # Load model
-model = joblib.load("hypertension_model.pkl")
+model = joblib.load("best_hypertension_model_XGBoost.pkl")
 print('Model classes (debug):', model.classes_)
 # Load data
 data = pd.read_csv('final_realistic_hypertension_data.csv')
