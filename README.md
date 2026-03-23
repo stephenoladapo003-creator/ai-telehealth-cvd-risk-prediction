@@ -63,12 +63,8 @@ To develop a machine learning model that predicts hypertension risk in individua
 - Alcohol Heavy
 - Physically Active
 - High Salt Diet
-- Diagnosed
-- On Medication
-- Medication Adherence
 
 **Medical History Features:**
-- BP Controlled
 - Stroke History
 - Myocardial Infarction
 - Heart Failure
