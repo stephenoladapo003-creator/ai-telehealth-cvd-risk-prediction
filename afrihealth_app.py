@@ -47,6 +47,8 @@ with st.expander('Personal Details', expanded=True):
 
 with st.expander('Health and Lifestyle Factors', expanded=True):
     bmi = st.number_input('bmi', help="BMI = weight (kg) ÷ height² (m²). \n Example: 70kg / (1.75 × 1.75)" )
+    systolic_bp = st.number_input('Systolic BP (mmHg)', min_value=70, max_value=250, step=1)
+diastolic_bp = st.number_input('Diastolic BP (mmHg)', min_value=40, max_value=150, step=1)
     family_history_hypertension = st.selectbox('family_history_hypertension', ['No', 'Yes'])
     family_history_hypertension_map = {'No': 0, 'Yes': 1}
     diabetes = st.selectbox('diabetes', ['No', 'Yes'])
@@ -59,14 +61,6 @@ with st.expander('Health and Lifestyle Factors', expanded=True):
     physically_active_map = {'No': 0, 'Yes': 1}
     high_salt_diet = st.selectbox('high_salt_diet', ['No', 'Yes'])
     high_salt_diet_map = {'No': 0, 'Yes': 1}
-    diagnosed = st.selectbox('diagnosed', ['No', 'Yes'], help="Have you been previously diagnosed with hypertension by a healthcare professional?")
-    diagnosed_map = {'No': 0, 'Yes': 1}
-    on_medication = st.selectbox('on_medication', ['No', 'Yes'], help="Are you currently taking any medication for hypertension?")
-    on_medication_map = {'No': 0, 'Yes': 1}
-    medication_adherence = st.selectbox('medication_adherence', ['No','Yes'], help="Are you adhering to your prescribed medication regimen?")
-    medication_adherence_map = {'No':0 , 'Yes':1}
-    bp_controlled = st.selectbox('bp_controlled', ['No', 'Yes'], help="Is your blood pressure controlled?")
-    bp_controlled_map = {'No': 0, 'Yes': 1}
     stroke_history = st.selectbox('stroke_history', ['No', 'Yes'], help="Have you had a stroke before?")
     stroke_history_map = {'No': 0, 'Yes': 1}
     myocardial_infarction = st.selectbox('myocardial_infarction', ['No', 'Yes'], help="Have you had a myocardial infarction (heart attack) before?")
@@ -135,19 +129,18 @@ def all_fields_filled(user_input, features):
 
 #Predict hypertension status
 if st.button('Predict Hypertension Status'):
-    # Check if all fields are filled before making a prediction
-    filled, missing_field = all_fields_filled(userInputdict, features)
-    if not filled:
-        st.warning(f"Please fill in the field: {missing_field} before predicting!")
-    else:
-        # Create DataFrame with correct order
-        user_df = pd.DataFrame([userInputdict])
-        user_df = user_df[model.feature_names_in_]  # Ensure the order of features matches the model's expected input
+        input_data = preprocess_input()
+
+prediction = model.predict([input_data])[0]
+probability = model.predict_proba([input_data])[0][1]
+
+st.subheader("Result")
+
+if prediction == 1:
+    st.error(f"⚠️ High Risk of Hypertension ({probability*100:.2f}%)")
+else:
+    st.success(f"✅ Low Risk of Hypertension ({probability*100:.2f}%)")
         
-        
-        prediction = model.predict(user_df)[0] # returns the first element of the array, which is the predicted class (0 or 1)
-        probability = model.predict_proba(user_df)[0] # Probability of the predicted class
-    
         hypertensive_class = 0 # 0 corresponds to "Hypertensive" in the model's classes
         non_hypertensive_class = 1# 1 corresponds to "Non-Hypertensive" in the model's classes
         predicted_label = "Hypertensive" if prediction == hypertensive_class else "Non-Hypertensive"
@@ -223,3 +216,31 @@ if st.button('Predict Hypertension Status'):
                 - Schedule routine check-ups  
                 """)    
                 
+
+def preprocess_input():
+    return [
+        float(age),
+        sex_map[sex],
+        age_group_map[age_group],
+        float(bmi),
+        family_history_hypertension_map[family_history_hypertension],
+        diabetes_map[diabetes],
+        smoking_map[smoking],
+        alcohol_heavy_map[alcohol_heavy],
+        physically_active_map[physically_active],
+        high_salt_diet_map[high_salt_diet],
+        stroke_history_map[stroke_history],
+        myocardial_infarction_map[myocardial_infarction],
+        heart_failure_map[heart_failure],
+        float(sleep_hours),
+        float(systolic_bp),
+        float(diastolic_bp),
+        float(total_cholesterol_mg_dl),
+        float(ldl_mg_dl),
+        float(hdl_mg_dl),
+        float(creatinine_mg_dl),
+        residence_map[residence],
+        income_level_map[income_level],
+        education_level_map[education_level],
+        stress_level_map[stress_level]
+    ]
